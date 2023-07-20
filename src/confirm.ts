@@ -15,8 +15,8 @@ export class Confirm {
     private render = async (flag: boolean): Promise<void> => {
         await this.init()
 
-        if (flag) return console.log(` ${colors.cyan(">OK")}   Cancel`)
-        console.log(`  OK  ${colors.cyan(">Cancel")}`)
+        if (flag) return console.log(` ${colors.cyan("> OK")}    Cancel`)
+        console.log(`   OK  ${colors.cyan("> Cancel")}`)
     }
     private watchKeyPress = async (): Promise<boolean | undefined> => {
         for await (const keypress of readKeypress()) {
