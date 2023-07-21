@@ -8,13 +8,11 @@ export class SelectBox {
     index: number
     items: any[]
     explanation: string
-    renderRange: number
     keyLocked: boolean
     constructor({ index, items, explanation }: ConfigSelectBox) {
         this.index = index || 0
         this.items = items || []
         this.explanation = explanation || ""
-        this.renderRange = 2
         this.keyLocked = false
     }
     run = () => {
@@ -24,26 +22,11 @@ export class SelectBox {
     private render = async (items: Record<any, any>[], selectedIndex: number): Promise<void> => {
         await this.init()
 
-        const isStart = selectedIndex > 0
-
-        const min = isStart
-            ? selectedIndex - 1
-            : 0
-        const max = isStart
-            ? selectedIndex + this.renderRange
-            : selectedIndex + this.renderRange + 1
-        const sliced = items.slice(min, max)
-
-        sliced.forEach((option, i) => {
+        items.forEach((option, i) => {
             let str = ""
             Object.values(option).forEach(v => str += `${v} `)
 
-            if (isStart) {
-                if (i === 1) return console.log(colors.cyan(` > ${str}\r`))
-            } else {
-                if (i === selectedIndex) return console.log(colors.cyan(` > ${str}\r`))
-            }
-
+            if (i === selectedIndex) return console.log(colors.cyan(` > ${str}`))
             console.log(`   ${str}`)
         })
     }
