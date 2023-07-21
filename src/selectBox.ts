@@ -8,10 +8,12 @@ export class SelectBox {
     items: any[]
     index: number
     explanation: string
+    keyLocked: boolean
     constructor({ index, items, explanation }: ConfigSelectBox) {
         this.index = index || 0
         this.items = items || []
         this.explanation = explanation || ""
+        this.keyLocked = false
     }
     run = () => {
         this.render(this.items, this.index)
@@ -31,6 +33,8 @@ export class SelectBox {
     }
     private watchKeyPress = async (): Promise<any | undefined> => {
         for await (const keypress of readKeypress()) {
+            if (this.keyLocked) continue
+            this.keyLocked = true
 
             if (keypress.ctrlKey && keypress.key === 'c') Deno.exit(0)
 
@@ -39,14 +43,22 @@ export class SelectBox {
             }
 
             if (keypress.key === "up") {
-                if (isOver(this.index - 1, this.items.length)) continue
+                if (isOver(this.index - 1, this.items.length)) {
+                    this.keyLocked = false
+                    continue
+                }
                 this.render(this.items, --this.index)
             }
 
             if (keypress.key === "down") {
-                if (isOver(this.index + 1, this.items.length)) continue
+                if (isOver(this.index + 1, this.items.length)) {
+                    this.keyLocked = false
+                    continue
+                }
                 this.render(this.items, ++this.index)
             }
+
+            this.keyLocked = false
         }
     }
     private init = () => {

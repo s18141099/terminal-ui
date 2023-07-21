@@ -2,38 +2,44 @@ import { readKeypress } from "https://deno.land/x/keypress@0.0.11/mod.ts"
 import { colors } from "./css.ts"
 
 export class Confirm {
-    flag: boolean
     explanation: string
-    constructor(explanation?: string) {
-        this.flag = true
+    isOk: boolean
+    keyLocked: boolean
+    constructor({ explanation }: { explanation?: string }) {
         this.explanation = explanation || ""
+        this.isOk = true
+        this.keyLocked = false
     }
     run = () => {
-        this.render(this.flag)
+        this.render(this.isOk)
         return this.watchKeyPress()
     }
-    private render = async (flag: boolean): Promise<void> => {
+    private render = async (isOk: boolean): Promise<void> => {
         await this.init()
 
-        if (flag) return console.log(` ${colors.cyan("> OK")}    Cancel`)
+        if (isOk) return console.log(` ${colors.cyan("> OK")}    Cancel`)
         console.log(`   OK  ${colors.cyan("> Cancel")}`)
     }
     private watchKeyPress = async (): Promise<boolean | undefined> => {
         for await (const keypress of readKeypress()) {
+            if (this.keyLocked) continue
+            this.keyLocked = true
 
             if (keypress.ctrlKey && keypress.key === 'c') Deno.exit(0)
 
-            if (keypress.key === "return") return this.flag
+            if (keypress.key === "return") return this.isOk
 
             if (keypress.key === "right") {
-                this.flag = false
-                this.render(this.flag)
+                this.isOk = false
+                await this.render(this.isOk)
             }
 
             if (keypress.key === "left") {
-                this.flag = true
-                this.render(this.flag)
+                this.isOk = true
+                await this.render(this.isOk)
             }
+
+            this.keyLocked = false
         }
     }
     private init = () => {
