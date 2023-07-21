@@ -27,7 +27,10 @@ export class Confirm {
 
             if (keypress.ctrlKey && keypress.key === 'c') Deno.exit(0)
 
-            if (keypress.key === "return") return this.isOk
+            if (keypress.key === "return") {
+                this.keyLocked = false
+                return this.isOk
+            }
 
             if (keypress.key === "right") {
                 this.isOk = false
