@@ -1,10 +1,10 @@
 import { readKeypress } from "https://deno.land/x/keypress@0.0.11/mod.ts"
-import { colors } from "./css.ts"
+import { colors } from "../css.ts"
 
 export class Confirm {
     explanation: string
-    isOk: boolean
-    keyLocked: boolean
+    private isOk: boolean
+    private keyLocked: boolean
     constructor({ explanation }: { explanation?: string }) {
         this.explanation = explanation || ""
         this.isOk = true

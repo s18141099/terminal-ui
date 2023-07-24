@@ -1,15 +1,20 @@
 // deno-lint-ignore-file no-explicit-any
-import { ConfigSelectBox } from "./types.ts"
 import { readKeypress } from "https://deno.land/x/keypress@0.0.11/mod.ts"
-import { colors } from "./css.ts"
-import { isOver } from "./check.ts"
+import { colors, options } from "../css.ts"
+import { isOver } from "../check.ts"
+
+type Config = {
+    index?: number
+    items?: any[]
+    explanation?: string
+}
 
 export class SelectBox {
-    index: number
+    private index: number
     items: any[]
     explanation: string
-    keyLocked: boolean
-    constructor({ index, items, explanation }: ConfigSelectBox) {
+    private keyLocked: boolean
+    constructor({ index, items, explanation }: Config) {
         this.index = index || 0
         this.items = items || []
         this.explanation = explanation || ""
@@ -64,7 +69,7 @@ export class SelectBox {
     private init = () => {
         return new Promise(relove => {
             console.clear()
-            console.log(this.explanation)
+            console.log(`${options.bold(this.explanation)}`)
             return relove(true)
         })
     }
