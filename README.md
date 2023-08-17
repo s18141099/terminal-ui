@@ -10,7 +10,7 @@ It includes several components and CSS options.
 
 ## Installation
 
-Dillinger requires [Deno](https://deno.land/)  to run.
+It requires [Deno](https://deno.land/)  to run.
 ```js
 import { Confirm, SelectBox, Prompt, colors } from "https://raw.githubusercontent.com/s18141099/terminal-ui/main/src/mods.ts"
 ```
